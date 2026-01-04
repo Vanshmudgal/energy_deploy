@@ -69,7 +69,7 @@ const slides = [
     title: "DEFY GRAVITY",
     subtitle: "OWN THE AIR",
     image:
-      "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1920&auto=format&fit=crop",
+     "https://images.unsplash.com/photo-1664494130837-14e0473ed284?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   },
   {
     id: 2,
