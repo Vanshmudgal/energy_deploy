@@ -62,7 +62,7 @@ const products = [
   },
 ];
 
-// --- HERO SLIDES ---
+// --- HERO SLIDES (UPDATED SLIDE 3) ---
 const slides = [
   {
     id: 1,
@@ -80,15 +80,17 @@ const slides = [
   },
   {
     id: 3,
-    title: "UNSTOPPABLE",
-    subtitle: "NO LIMITS. NO FEAR.",
+    title: "SYSTEM OVERLOAD",
+    subtitle: "ELECTRIFY THE NIGHT",
+    // Cyberpunk/Neon image to match the #ccff00 brand color
     image:
-      "https://images.unsplash.com/photo-1621360841016-b8e734377033?q=80&w=1920&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1920&auto=format&fit=crop",
   },
 ];
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -96,7 +98,17 @@ export default function Home() {
         prev === slides.length - 1 ? 0 : prev + 1
       );
     }, 6000);
-    return () => clearInterval(timer);
+
+    // Add scroll listener for navbar background change
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const goToPreviousSlide = () => {
@@ -109,11 +121,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* NAVBAR WITH TRANSPARENT PROP */}
-      <Navbar activePage="home" transparent={true} />
+      {/* NAVBAR - Dynamic background based on scroll */}
+      <Navbar 
+        activePage="home" 
+        transparent={!isScrolled} 
+      />
 
-      {/* HERO SECTION */}
-      <section className="relative h-screen md:h-[90vh] overflow-hidden">
+      {/* HERO SECTION with padding-top for mobile navbar */}
+      <section className="relative h-screen md:h-[90vh] overflow-hidden pt-16 md:pt-0">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
@@ -132,12 +147,12 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent" />
             </div>
 
-            {/* Content */}
+            {/* Content - FIXED TEXT STYLING */}
             <div className="relative h-full flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-24">
               <p className="text-[#ccff00] text-sm md:text-base lg:text-lg tracking-[0.3em] md:tracking-[0.5em] mb-3 md:mb-4 uppercase">
                 {slide.subtitle}
               </p>
-              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black italic leading-tight md:leading-none">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black italic leading-tight md:leading-none break-words whitespace-nowrap">
                 {slide.title}
               </h1>
               
