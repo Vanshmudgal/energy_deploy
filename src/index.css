@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+/* Example in your global CSS file */
+@font-face {
+  font-family: 'YourCustomFont';
+  src: url('/fonts/your-font.woff2') format('woff2');
+  font-weight: 900;
+  font-style: italic;
+  /* ADD THIS LINE 👇 */
+  font-display: swap; 
+}

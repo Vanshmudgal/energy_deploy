@@ -18,7 +18,7 @@ const events = [
     date: "NOV 04",
     location: "Tokyo, Japan",
     status: "SOLD OUT",
-    image: "https://images.unsplash.com/photo-1552062686-2a6288339121?q=80&w=600&auto=format&fit=crop"
+    image: "https://upload.wikimedia.org/wikipedia/commons/9/9f/King_of_Europe_Round_3_Lydden_Hill_2014_%2814356011899%29.jpg"
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ const events = [
     date: "DEC 18",
     location: "Dubai, UAE",
     status: "OPEN",
-    image: "https://images.unsplash.com/photo-1456425712194-e85c2367d302?q=80&w=600&auto=format&fit=crop"
+    image: "https://play-lh.googleusercontent.com/jCBxmz9cNGEtFWuxkmmkylk_Ao0IgxWO068nvUSLSkt2Rw5BE5cLYD2gUsss6WKfkAo"
   },
   {
     id: 4,
@@ -34,7 +34,7 @@ const events = [
     date: "JAN 22",
     location: "Aspen, USA",
     status: "OPEN",
-    image: "https://images.unsplash.com/photo-1516216628259-75a898a39d8e?q=80&w=600&auto=format&fit=crop"
+    image: "https://crva.imgix.net/hero-images/Ice-Skating.jpg?auto=compress%2Cformat&fit=crop&fm=webp&ixlib=php-3.1.0&q=80&v=1668019884"
   }
 ];
 
