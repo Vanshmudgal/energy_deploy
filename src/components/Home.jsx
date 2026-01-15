@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "./Navbar";
 
 // 🔥 IMPORT IMAGES (SAME FOLDER)
@@ -69,7 +68,7 @@ const slides = [
     title: "DEFY GRAVITY",
     subtitle: "OWN THE AIR",
     image:
-     "https://images.unsplash.com/photo-1664494130837-14e0473ed284?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      "https://images.unsplash.com/photo-1664494130837-14e0473ed284?q=80&w=1170&auto=format&fit=crop",
   },
   {
     id: 2,
@@ -120,9 +119,15 @@ export default function Home() {
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
+            {/* UPDATED: Lazy Loading Logic
+               1. First slide (index 0) is "eager" to prevent LCP delay.
+               2. Others are "lazy" to save bandwidth until needed.
+            */}
             <img
               src={slide.image}
               alt={slide.title}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent" />
@@ -161,9 +166,12 @@ export default function Home() {
                 <div
                   className={`absolute inset-0 blur-[100px] opacity-30 ${product.color}`}
                 />
+                {/* UPDATED: Added lazy loading to products */}
                 <img
                   src={product.image}
                   alt={product.name}
+                  loading="lazy"
+                  decoding="async"
                   className="relative w-full h-full object-contain p-6"
                 />
               </div>
