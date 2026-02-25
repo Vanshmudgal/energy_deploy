@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Instagram, Twitter, Trophy, TrendingUp } from "lucide-react";
 import Navbar from "./Navbar";
 
@@ -10,6 +10,9 @@ import SarahSpeedImg from "./sarah_speed.png";
 
 // Optimized AthleteCard
 const AthleteCard = React.memo(({ athlete, priority = false }) => {
+  // 1. State to track image loading
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const getObjectPosition = useMemo(() => {
     if (athlete.imagePosition === 'right') return '65% center';
     if (athlete.imagePosition === 'left') return '35% center';
@@ -18,16 +21,27 @@ const AthleteCard = React.memo(({ athlete, priority = false }) => {
 
   return (
     <div className="group relative h-[500px] w-full bg-[#151515] overflow-hidden border border-white/10 hover:border-[#ccff00] transition-all duration-300">
+      
+      {/* 2. Skeleton Loading UI */}
+      {/* Renders a pulsating background while the image is downloading */}
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-gray-800 animate-pulse z-0"></div>
+      )}
+
       {/* Background Image */}
-      <div className="absolute inset-0 overflow-hidden bg-gray-900">
+      <div className="absolute inset-0 overflow-hidden bg-transparent z-0">
         <img
           src={athlete.imageSrc}
           alt={athlete.name}
-          className="w-full h-full object-cover transition-all duration-700 grayscale group-hover:grayscale-0 group-hover:scale-110 opacity-60 group-hover:opacity-100"
+          // 3. Trigger state change when loaded
+          onLoad={() => setIsLoaded(true)}
+          // 4. Conditional opacity classes to hide the image until loaded
+          className={`w-full h-full object-cover transition-all duration-700 ${
+            isLoaded 
+              ? "grayscale group-hover:grayscale-0 group-hover:scale-110 opacity-60 group-hover:opacity-100" 
+              : "opacity-0 scale-105"
+          }`}
           style={{ objectPosition: getObjectPosition }}
-          // Vital Performance Logic:
-          // 1. If priority is true (first item), load EAGERLY and with HIGH priority (fixes LCP)
-          // 2. If priority is false, LAZY load to save bandwidth
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
           decoding="async"
@@ -35,10 +49,10 @@ const AthleteCard = React.memo(({ athlete, priority = false }) => {
       </div>
 
       {/* Overlay Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-60 transition-opacity"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-60 transition-opacity z-10"></div>
 
       {/* Content */}
-      <div className="absolute bottom-0 w-full p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+      <div className="absolute bottom-0 w-full p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 z-20">
         <p className="text-[#ccff00] font-bold tracking-widest text-sm uppercase mb-1">
           {athlete.sport}
         </p>
@@ -88,7 +102,7 @@ const Athletes = () => {
       name: "JAX RYDER",
       sport: "Freestyle BMX",
       country: "USA",
-      imageSrc: JackRyderImg, // Use imported variable
+      imageSrc: JackRyderImg,
       quote: "Gravity is just a suggestion.",
       stats: { wins: 14, rank: "World #1" },
     },
@@ -154,8 +168,6 @@ const Athletes = () => {
             <AthleteCard 
                 key={athlete.id} 
                 athlete={athlete} 
-                // Priority logic: The first card (index 0) gets eager loading (LCP).
-                // All others get lazy loading.
                 priority={index === 0} 
             />
           ))}
