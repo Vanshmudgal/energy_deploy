@@ -26,15 +26,7 @@ const events = [
     date: "DEC 18",
     location: "Dubai, UAE",
     status: "OPEN",
-    image: "https://play-lh.googleusercontent.com/jCBxmz9cNGEtFWuxkmmkylk_Ao0IgxWO068nvUSLSkt2Rw5BE5cLYD2gUsss6WKfkAo" // Note: This might 404/fail to load depending on Google's URL status
-  },
-  {
-    id: 4,
-    title: "WINTER X-FEST",
-    date: "JAN 22",
-    location: "Aspen, USA",
-    status: "OPEN",
-    image: "https://crva.imgix.net/hero-images/Ice-Skating.jpg?auto=compress%2Cformat&fit=crop&fm=webp&ixlib=php-3.1.0&q=80&v=1668019884"
+    image: "https://play-lh.googleusercontent.com/jCBxmz9cNGEtFWuxkmmkylk_Ao0IgxWO068nvUSLSkt2Rw5BE5cLYD2gUsss6WKfkAo" // Handled gracefully by our onError fallback
   }
 ];
 
@@ -43,21 +35,21 @@ const EventCard = ({ event }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
-    <div className="relative">
-      {/* Hidden image to track network loading state 
-        Using loading="lazy" defers network request until card is near viewport 
-      */}
+    <div className="relative overflow-hidden">
+      
+      {/* Invisible tracking image for lazy loading */}
       <img
         src={event.image}
         alt={event.title}
         loading="lazy"
         onLoad={() => setImageLoaded(true)}
-        className="hidden"
+        onError={() => setImageLoaded(true)} 
+        className="absolute inset-0 w-full h-full opacity-0 pointer-events-none -z-10"
       />
 
       {!imageLoaded ? (
         /* --- SKELETON STATE --- */
-        <div className="bg-[#111] border border-white/5 p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 animate-pulse">
+        <div className="bg-[#111] border border-white/5 p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 animate-pulse relative z-10">
           {/* Date Skeleton */}
           <div className="flex-shrink-0 w-full md:w-32 h-32 bg-gray-800 rounded"></div>
           
@@ -78,7 +70,7 @@ const EventCard = ({ event }) => {
         </div>
       ) : (
         /* --- LOADED CARD STATE --- */
-        <div className="group bg-[#111] border border-white/10 hover:border-[#ccff00] p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-[0_0_30px_rgba(204,255,0,0.1)]">
+        <div className="group bg-[#111] border border-white/10 hover:border-[#ccff00] p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-[0_0_30px_rgba(204,255,0,0.1)] relative z-10">
           {/* Date Box */}
           <div className="flex-shrink-0 w-full md:w-32 h-32 border-2 border-[#ccff00] flex flex-col items-center justify-center bg-black group-hover:bg-[#ccff00] group-hover:text-black transition-colors duration-300">
             <span className="text-3xl font-black uppercase text-center leading-none">
@@ -92,6 +84,9 @@ const EventCard = ({ event }) => {
               src={event.image} 
               className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110" 
               alt={event.title} 
+              onError={(e) => {
+                e.target.src = "https://images.unsplash.com/photo-1540331547168-8b63109225b7?q=80&w=600&auto=format&fit=crop"; 
+              }}
             />
           </div>
 
